@@ -1,0 +1,46 @@
+{
+  "_comment": "Placeholders to resolve before writing to <target-repo>/.claude/settings.json: fill BUILD_ALLOW_PATTERNS with this project's real build/test/lint commands (see references/stack-commands.md), fill VCS_ALLOW with the VCS read/write commands actually wanted (omit push unless the user wants agents pushing), and list this repo's actual local-secret env filenames explicitly under deny — do NOT deny a wildcard like './.env.*', since that also blocks reading '.env.example' (the committed, placeholder-only template file agents legitimately need to read/update; only the real .env variants are secret). If the stack has a real formatter, replace the PostToolUse hook command with one that formats ONLY the file just edited (see references/stack-commands.md and assets/format_on_save.template.sh) and verify it actually runs before treating bootstrap as done; otherwise delete the whole PostToolUse block rather than shipping an unverified guess. Delete this _comment key when done — it is not valid settings.json and exists only in this template.",
+  "permissions": {
+    "allow": [
+      "__BUILD_ALLOW_PATTERNS__",
+      "__TEST_ALLOW_PATTERNS__",
+      "__LINT_FORMAT_ALLOW_PATTERNS__",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add*)",
+      "Bash(git commit*)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.local)",
+      "Read(./.env.production)",
+      "__EXTRA_SECRET_DENY_PATTERNS__",
+      "Bash(git push*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/protect_paths.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/format_on_save.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
