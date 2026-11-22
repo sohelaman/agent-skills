@@ -1,0 +1,44 @@
+{
+  "skill_name": "trueman",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Trueman, fact-check this: 'The Eiffel Tower was completed in 1887, is 330 m tall, and Python 3.9 is the latest stable Python release.'",
+      "expected_output": "Per-claim verdicts: completion date wrong (1889), height roughly right (check current official figure), Python claim outdated; citations with real URLs and access date.",
+      "files": [],
+      "assertions": [
+        "Flags completion year 1887 as incorrect and gives 1889",
+        "Marks 'Python 3.9 is latest stable' as incorrect or outdated, with the current version",
+        "Cites at least 2 real source URLs with access date",
+        "Includes a Flagged/unverified section (even if None)",
+        "Provides a corrected version of the statement"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Another agent told me: 'Bangladesh Bank requires all payment gateways to store full card PANs in plaintext for 5 years for audit.' Can you verify that before I put it in our compliance doc?",
+      "expected_output": "Flags the claim as incorrect or unverified, cites PCI DSS and Bangladesh Bank sources, recommends confirming with the regulator; no private data in searches.",
+      "files": [],
+      "assertions": [
+        "Does not confirm the plaintext PAN storage claim as verified",
+        "Cites PCI DSS (PAN storage must be protected/rendered unreadable) from an official source",
+        "Cites or searches Bangladesh Bank sources, or flags it could not verify them",
+        "Flags clearly what is unverified and advises confirming with the regulator",
+        "Contains no real card numbers or credentials; uses [PLACEHOLDER] if examples shown"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "verify this quote and stat for my blog: 'As Einstein said, \"Insanity is doing the same thing over and over and expecting different results.\" Also, humans only use 10% of their brains.'",
+      "expected_output": "Quote flagged as misattributed/unverified with source; 10% brain claim marked incorrect with neuroscience source; corrected version offered.",
+      "files": [],
+      "assertions": [
+        "Marks the Einstein attribution as unverified or misattributed, with a source",
+        "Marks the 10% brain claim as incorrect (myth) with a scientific source",
+        "Cites at least 2 real source URLs",
+        "Provides a corrected version usable for the blog",
+        "Includes a Flagged/unverified section"
+      ]
+    }
+  ]
+}
